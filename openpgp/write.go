@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/nikirill/go-crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/errors"
-	"golang.org/x/crypto/openpgp/packet"
-	"golang.org/x/crypto/openpgp/s2k"
+	"github.com/nikirill/go-crypto//openpgp/errors"
+	"github.com/nikirill/go-crypto//openpgp/packet"
+	"github.com/nikirill/go-crypto//openpgp/s2k"
 )
 
 // DetachSign signs message with the private key from signer (which must
