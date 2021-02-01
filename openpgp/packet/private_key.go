@@ -18,9 +18,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/nikirill/go-crypto//openpgp/elgamal"
-	"github.com/nikirill/go-crypto//openpgp/errors"
-	"github.com/nikirill/go-crypto//openpgp/s2k"
+	"github.com/nikirill/go-crypto/openpgp/elgamal"
+	"github.com/nikirill/go-crypto/openpgp/errors"
+	"github.com/nikirill/go-crypto/openpgp/s2k"
 )
 
 // PrivateKey represents a possibly encrypted private key. See RFC 4880,

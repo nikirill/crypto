@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/nikirill/go-crypto//nacl/secretbox"
+	"github.com/nikirill/go-crypto/nacl/secretbox"
 )
 
 func Example() {

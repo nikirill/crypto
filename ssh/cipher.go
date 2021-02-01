@@ -17,8 +17,8 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/nikirill/go-crypto//chacha20"
-	"github.com/nikirill/go-crypto//poly1305"
+	"github.com/nikirill/go-crypto/chacha20"
+	"github.com/nikirill/go-crypto/poly1305"
 )
 
 const (

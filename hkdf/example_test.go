@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/nikirill/go-crypto//hkdf"
+	"github.com/nikirill/go-crypto/hkdf"
 )
 
 // Usage example that expands one master secret into three other

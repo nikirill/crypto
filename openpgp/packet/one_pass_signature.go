@@ -7,8 +7,8 @@ package packet
 import (
 	"crypto"
 	"encoding/binary"
-	"github.com/nikirill/go-crypto//openpgp/errors"
-	"github.com/nikirill/go-crypto//openpgp/s2k"
+	"github.com/nikirill/go-crypto/openpgp/errors"
+	"github.com/nikirill/go-crypto/openpgp/s2k"
 	"io"
 	"strconv"
 )
