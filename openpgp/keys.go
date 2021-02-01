@@ -6,6 +6,7 @@ package openpgp
 
 import (
 	"crypto/rsa"
+	"fmt"
 	"io"
 	"time"
 
@@ -272,8 +273,9 @@ func ReadKeyRing(r io.Reader) (el EntityList, err error) {
 				break
 			}
 			if err != nil {
-				el = nil
-				break
+				// instead of breaking on a key with a random error,
+				// we ignore it and continue to the next key.
+				err = readToNextPublicKey(packets)
 			}
 		} else {
 			el = append(el, e)
@@ -405,6 +407,7 @@ func addUserID(e *Entity, packets *packet.Reader, pkt *packet.UserId) error {
 	identity := new(Identity)
 	identity.Name = pkt.Id
 	identity.UserId = pkt
+	fmt.Println(pkt)
 
 	for {
 		p, err := packets.Next()
