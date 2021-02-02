@@ -6,7 +6,6 @@ package openpgp
 
 import (
 	"crypto/rsa"
-	"fmt"
 	"io"
 	"time"
 
@@ -407,7 +406,6 @@ func addUserID(e *Entity, packets *packet.Reader, pkt *packet.UserId) error {
 	identity := new(Identity)
 	identity.Name = pkt.Id
 	identity.UserId = pkt
-	fmt.Println(pkt)
 
 	for {
 		p, err := packets.Next()
