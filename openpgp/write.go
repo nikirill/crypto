@@ -290,7 +290,7 @@ func Encrypt(ciphertext io.Writer, to []*Entity, signed *Entity, hints *FileHint
 			return nil, errors.InvalidArgumentError("cannot encrypt a message to key id " + strconv.FormatUint(to[i].PrimaryKey.KeyId, 16) + " because it has no encryption keys")
 		}
 
-		sig := to[i].primaryIdentity().SelfSignature
+		sig := to[i].PrimaryIdentity().SelfSignature
 
 		preferredSymmetric := sig.PreferredSymmetric
 		if len(preferredSymmetric) == 0 {
@@ -356,7 +356,7 @@ func Sign(output io.Writer, signed *Entity, hints *FileHints, config *packet.Con
 		hashToHashId(crypto.RIPEMD160),
 	}
 	defaultHashes := candidateHashes[len(candidateHashes)-1:]
-	preferredHashes := signed.primaryIdentity().SelfSignature.PreferredHash
+	preferredHashes := signed.PrimaryIdentity().SelfSignature.PreferredHash
 	if len(preferredHashes) == 0 {
 		preferredHashes = defaultHashes
 	}

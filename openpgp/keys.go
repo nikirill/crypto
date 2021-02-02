@@ -71,9 +71,9 @@ type KeyRing interface {
 	DecryptionKeys() []Key
 }
 
-// primaryIdentity returns the Identity marked as primary or the first identity
+// PrimaryIdentity returns the Identity marked as primary or the first identity
 // if none are so marked.
-func (e *Entity) primaryIdentity() *Identity {
+func (e *Entity) PrimaryIdentity() *Identity {
 	var firstIdentity *Identity
 	for _, ident := range e.Identities {
 		if firstIdentity == nil {
@@ -113,7 +113,7 @@ func (e *Entity) encryptionKey(now time.Time) (Key, bool) {
 	// the primary key doesn't have any usage metadata then we
 	// assume that the primary key is ok. Or, if the primary key is
 	// marked as ok to encrypt to, then we can obviously use it.
-	i := e.primaryIdentity()
+	i := e.PrimaryIdentity()
 	if !i.SelfSignature.FlagsValid || i.SelfSignature.FlagEncryptCommunications &&
 		e.PrimaryKey.PubKeyAlgo.CanEncrypt() &&
 		!i.SelfSignature.KeyExpired(now) {
@@ -146,7 +146,7 @@ func (e *Entity) signingKey(now time.Time) (Key, bool) {
 
 	// If we have no candidate subkey then we assume that it's ok to sign
 	// with the primary key.
-	i := e.primaryIdentity()
+	i := e.PrimaryIdentity()
 	if !i.SelfSignature.FlagsValid || i.SelfSignature.FlagSign &&
 		!i.SelfSignature.KeyExpired(now) {
 		return Key{e, e.PrimaryKey, e.PrivateKey, i.SelfSignature}, true
