@@ -7,7 +7,6 @@ package openpgp
 import (
 	"crypto/rsa"
 	"io"
-	"log"
 	"time"
 
 	"github.com/nikirill/go-crypto/openpgp/armor"
@@ -288,7 +287,6 @@ func ReadKeyRing(r io.Reader) (el EntityList, err error) {
 			if err != nil {
 				// instead of breaking on a key with a random error,
 				// we ignore it and continue to the next key.
-				log.Println(err)
 				err = readToNextPublicKey(packets)
 			}
 		} else {
