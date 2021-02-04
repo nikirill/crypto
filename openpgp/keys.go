@@ -7,6 +7,7 @@ package openpgp
 import (
 	"crypto/rsa"
 	"io"
+	"log"
 	"time"
 
 	"github.com/nikirill/go-crypto/openpgp/armor"
@@ -71,19 +72,32 @@ type KeyRing interface {
 	DecryptionKeys() []Key
 }
 
-// PrimaryIdentity returns the Identity marked as primary or the first identity
-// if none are so marked.
+// PrimaryIdentity returns the Identity marked as primary, or the most
+// recently create identity if none are so marked, or the most recent
+// primary identity if multiple are so marked. If several identities
+// have the same creation timestamp, the alphabetically first is returned.
+// The most recent and alphabetically first logic is added for determinism.
+// The original library returned the first Identity if none are marked as
+// primary which resulted was no-deterministic due to Go's map behaviour.
 func (e *Entity) PrimaryIdentity() *Identity {
-	var firstIdentity *Identity
+	var latestIdentity *Identity
+	var primaryIdentity *Identity
 	for _, ident := range e.Identities {
-		if firstIdentity == nil {
-			firstIdentity = ident
+		if latestIdentity == nil || latestIdentity.SelfSignature.CreationTime.Before(ident.SelfSignature.CreationTime) ||
+			(latestIdentity.SelfSignature.CreationTime.Equal(ident.SelfSignature.CreationTime) && latestIdentity.Name > ident.Name) {
+			latestIdentity = ident
 		}
 		if ident.SelfSignature.IsPrimaryId != nil && *ident.SelfSignature.IsPrimaryId {
-			return ident
+			if primaryIdentity == nil || primaryIdentity.SelfSignature.CreationTime.Before(ident.SelfSignature.CreationTime) ||
+				(primaryIdentity.SelfSignature.CreationTime.Equal(ident.SelfSignature.CreationTime) && primaryIdentity.Name > ident.Name) {
+				primaryIdentity = ident
+			}
 		}
 	}
-	return firstIdentity
+	if primaryIdentity != nil {
+		return primaryIdentity
+	}
+	return latestIdentity
 }
 
 // encryptionKey returns the best candidate Key for encrypting a message to the
@@ -274,6 +288,7 @@ func ReadKeyRing(r io.Reader) (el EntityList, err error) {
 			if err != nil {
 				// instead of breaking on a key with a random error,
 				// we ignore it and continue to the next key.
+				log.Println(err)
 				err = readToNextPublicKey(packets)
 			}
 		} else {
